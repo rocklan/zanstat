@@ -7,7 +7,7 @@ namespace Zanstat
     {
         static string hostname = "localhost";
         static int port = 10666;
-
+        static string rconpassword = "";
         static int Main(string[] args)
         {
             try
@@ -35,11 +35,17 @@ namespace Zanstat
                     if (!GetServerArg(i, args))
                         return 1;
                 }
+
+                if (args[i] == "-rcon")
+                {
+                    if (!GetRconArg(i, args))
+                        return 1;
+                }
             }
 
             Console.WriteLine($"Connecting to {hostname}:{port} ... ");
 
-            ZandronumRcon Zanlib = new ZandronumRcon(hostname, port);
+            Zandronum Zanlib = new Zandronum(hostname, port);
 
             for (var i = 0; i < args.Length; i++)
             {
@@ -96,20 +102,8 @@ namespace Zanstat
                 }
                 else if (args[i] == "-getdata")
                 {
-                    var serverName = Zanlib.Name.Get();
-                    Console.WriteLine($"Server name: {serverName}");
-
-                    Console.WriteLine("waiting 10 secs...");
-                    System.Threading.Thread.Sleep(10000);
-
-                    var players = Zanlib.Players.Get();
-                    Console.WriteLine("Teams:");
-                    foreach (var player in players)
-                        Console.WriteLine($"  {player}");
-
-                    
-
-                    
+                    Zanlib.Rcon.DisplayData(rconpassword);
+                    //Zanlib.ServerStats.Display();
                 }
             }
 
@@ -149,5 +143,19 @@ namespace Zanstat
             }
         }
 
+
+        private static bool GetRconArg(int i, string[] args)
+        {
+            if (i < args.Length)
+            {
+                rconpassword = args[i + 1];
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Must specify an rcon password!");
+                return false;
+            }
+        }
     }
 }

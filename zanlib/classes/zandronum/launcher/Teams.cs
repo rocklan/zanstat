@@ -29,7 +29,7 @@
         /// <returns></returns>
         public Team[] Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_TEAMINFO_NUMBER | SQF_TEAMINFO_NAME | SQF_TEAMINFO_COLOR | SQF_TEAMINFO_SCORE);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_TEAMINFO_NUMBER | SQF_TEAMINFO_NAME | SQF_TEAMINFO_COLOR | SQF_TEAMINFO_SCORE);
 
             byte numTeams;
             result = MessageHelpers.GetByteFromMessage(result, out numTeams);

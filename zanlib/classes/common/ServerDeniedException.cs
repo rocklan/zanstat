@@ -23,4 +23,14 @@ namespace Zanlib
             Response = response;
         }
     }
+
+    public class RconDeniedException : Exception
+    {
+        public RconDeniedException() : base() { }
+
+        public RconDeniedException(string message) : base(message)
+        {
+
+        }
+    }
 }

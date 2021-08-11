@@ -17,7 +17,7 @@ namespace Zanlib
         /// <returns></returns>
         public string Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_IWAD);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_IWAD);
             MessageHelpers.GetStringFromMessage(result, out string iwad);
             return iwad;
         }

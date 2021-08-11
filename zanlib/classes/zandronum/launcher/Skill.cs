@@ -14,7 +14,7 @@
         /// <returns></returns>
         public byte Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_GAMESKILL);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_GAMESKILL);
             byte skill;
             MessageHelpers.GetByteFromMessage(result, out skill);
             return skill;

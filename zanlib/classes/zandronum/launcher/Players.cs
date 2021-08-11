@@ -32,7 +32,7 @@
         /// <returns></returns>
         public Player[] Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_GAMETYPE | SQF_NUMPLAYERS | SQF_PLAYERDATA);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_GAMETYPE | SQF_NUMPLAYERS | SQF_PLAYERDATA);
 
             byte gameModeByte;
             result = MessageHelpers.GetByteFromMessage(result, out gameModeByte);

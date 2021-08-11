@@ -29,7 +29,7 @@
         /// <returns></returns>
         public Limit Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_LIMITS);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_LIMITS);
             var data = new Limit();
             result = MessageHelpers.GetShortFromMessage(result, out data.FragLimit);
             result = MessageHelpers.GetShortFromMessage(result, out data.TimeLimit);

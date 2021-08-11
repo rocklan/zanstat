@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Zanlib
 {
-    public partial class ZandronumRcon
+    public partial class Zandronum
     {
         
         private readonly NetworkHelper networkHelper;
 
-        public ZandronumRcon(string ServerName = "localhost", int Port = 10666)
+        public Zandronum(string ServerName = "localhost", int Port = 10666)
         {
             networkHelper = new NetworkHelper(ServerName, Port);
 
@@ -22,9 +22,12 @@ namespace Zanlib
             PWads = new Pwads(networkHelper);
             Skill = new Skill(networkHelper);
             Teams = new Teams(networkHelper);
+            ServerStats = new ServerStats(networkHelper);
+            Rcon = new Rcon(networkHelper);
         }
 
-        
+
+        public ServerStats ServerStats { get; private set; }
         public Iwad Iwad { get; private set; }
         public Limits Limits { get; private set; }
         public MapName MapName { get; private set; }
@@ -34,6 +37,8 @@ namespace Zanlib
         public Pwads PWads { get; private set; }
         public Skill Skill { get; private set; }
         public Teams Teams { get; private set; }
+
+        public Rcon Rcon { get; private set; }
     }
 
 }

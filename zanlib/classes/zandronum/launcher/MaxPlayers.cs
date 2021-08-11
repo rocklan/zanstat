@@ -14,7 +14,7 @@
         /// <returns></returns>
         public byte Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_MAXPLAYERS);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_MAXPLAYERS);
             byte maxPlayers;
             MessageHelpers.GetByteFromMessage(result, out maxPlayers);
             return maxPlayers;

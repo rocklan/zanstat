@@ -14,7 +14,7 @@
         /// <returns></returns>
         public string Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_MAPNAME);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_MAPNAME);
             MessageHelpers.GetStringFromMessage(result, out string mapName);
             return mapName;
         }

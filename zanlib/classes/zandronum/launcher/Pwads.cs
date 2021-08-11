@@ -16,7 +16,7 @@ namespace Zanlib
         /// <returns></returns>
         public string[] Get()
         {
-            var result = _networkHelper.GetMessageFromServer(SQF_PWADS);
+            var result = _networkHelper.GetLauncherMessageFromServer(SQF_PWADS);
             byte numPwads;
             result = MessageHelpers.GetByteFromMessage(result, out numPwads);
 

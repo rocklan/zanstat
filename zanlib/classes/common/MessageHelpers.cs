@@ -75,7 +75,7 @@ namespace Zanlib
         /// </summary>
         /// <param name="messageType"></param>
         /// <returns></returns>
-        public static byte[] GetMessage(int messageType)
+        public static byte[] GetLauncherMessage(int messageType)
         {
             var message = new int[3];
             message[0] = LAUNCHER_CHALLENGE;
@@ -86,5 +86,27 @@ namespace Zanlib
             Buffer.BlockCopy(message, 0, byteMessage, 0, byteMessage.Length);
             return byteMessage;
         }
+
+        /// <summary>
+        /// Returns an rcon "can we please connect" message
+        /// </summary>
+        public static byte[] GetRconConnectMessage()
+        {
+            var message = new byte[2];
+            message[0] = (byte)RconClientRequestEnum.CLRC_BEGINCONNECTION;
+            message[1] = 4;
+            return message;
+        }
+
+        public static byte[] GetRconAuthenticateMessage(byte[] auth)
+        {
+            var message = new byte[auth.Length + 1];
+            message[0] = (byte)RconClientRequestEnum.CLRC_PASSWORD;
+            Buffer.BlockCopy(auth, 0, message, 1, auth.Length);
+            return message;
+        }
+
     }
+
+
 }
