@@ -17,14 +17,12 @@ namespace Zanlib
         public string[] Get()
         {
             var result = _networkHelper.GetLauncherMessageFromServer(SQF_PWADS);
-            byte numPwads;
-            result = MessageHelpers.GetByteFromMessage(result, out numPwads);
+            byte numPwads = MessageHelpers.GetByteFromMessage(ref result);
 
             var pwads = new List<string>();
             for (var i = 0; i < numPwads; i++)
             {
-                string pwad;
-                result = MessageHelpers.GetStringFromMessage(result, out pwad);
+                string pwad = MessageHelpers.GetStringFromMessage(ref result);
                 pwads.Add(pwad);
             }
 

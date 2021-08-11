@@ -34,13 +34,11 @@
         {
             var result = _networkHelper.GetLauncherMessageFromServer(SQF_GAMETYPE | SQF_NUMPLAYERS | SQF_PLAYERDATA);
 
-            byte gameModeByte;
-            result = MessageHelpers.GetByteFromMessage(result, out gameModeByte);
-            result = MessageHelpers.GetByteFromMessage(result, out _); // instagib setting
-            result = MessageHelpers.GetByteFromMessage(result, out _); // buckshot setting
+            byte gameModeByte = MessageHelpers.GetByteFromMessage(ref result);
+            MessageHelpers.GetByteFromMessage(ref result); // instagib setting
+            MessageHelpers.GetByteFromMessage(ref result); // buckshot setting
 
-            byte numPlayers;
-            result = MessageHelpers.GetByteFromMessage(result, out numPlayers);
+            byte numPlayers = MessageHelpers.GetByteFromMessage(ref result);
 
             GameModeEnum gameMode = (GameModeEnum)gameModeByte;
             var players = new Player[numPlayers];
@@ -48,14 +46,14 @@
             {
                 var player = new Player();
                 players[i] = player;
-                result = MessageHelpers.GetStringFromMessage(result, out player.Name);
+                player.Name = MessageHelpers.GetStringFromMessage(ref result);
                 result = MessageHelpers.GetShortFromMessage(result, out player.FragCount);
                 result = MessageHelpers.GetShortFromMessage(result, out player.Ping);
-                result = MessageHelpers.GetByteFromMessage(result, out player.IsSpectating);
-                result = MessageHelpers.GetByteFromMessage(result, out player.IsBot);
+                player.IsSpectating = MessageHelpers.GetByteFromMessage(ref result);
+                player.IsBot = MessageHelpers.GetByteFromMessage(ref result);
                 if (gameMode.IsTeamGame())
-                    result = MessageHelpers.GetByteFromMessage(result, out player.Team);
-                result = MessageHelpers.GetByteFromMessage(result, out player.TimeOnServer);
+                    player.Team = MessageHelpers.GetByteFromMessage(ref result);
+                player.TimeOnServer = MessageHelpers.GetByteFromMessage(ref result);
             }
 
             return players;

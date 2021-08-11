@@ -13,7 +13,7 @@ namespace Zanlib
         /// <param name="input"></param>
         /// <param name="str"></param>
         /// <returns></returns>
-        public static byte[] GetStringFromMessage(byte[] input, out string str)
+        public static string GetStringFromMessage(ref byte[] input)
         {
             var nullTerminatorIndex = input.Length;
             for (var i = 0; i < input.Length; i++)
@@ -25,10 +25,10 @@ namespace Zanlib
                 }
             }
 
-            str = Encoding.ASCII.GetString(input[0..nullTerminatorIndex]);
+            string str = Encoding.ASCII.GetString(input[0..nullTerminatorIndex]);
 
-            var remaining = input[(nullTerminatorIndex + 1)..];
-            return remaining;
+            input = input[(nullTerminatorIndex + 1)..];
+            return str;
         }
 
         /// <summary>
@@ -63,11 +63,11 @@ namespace Zanlib
         /// <param name="input"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static byte[] GetByteFromMessage(byte[] input, out byte val)
+        public static byte GetByteFromMessage(ref byte[] input)
         {
-            val = input[0];
-            var remaining = input[1..];
-            return remaining;
+            byte val = input[0];
+            input = input[1..];
+            return val;
         }
 
         /// <summary>
@@ -104,6 +104,13 @@ namespace Zanlib
             message[0] = (byte)RconClientRequestEnum.CLRC_PASSWORD;
             Buffer.BlockCopy(auth, 0, message, 1, auth.Length);
             message[33] = 0;
+            return message;
+        }
+
+        public static byte[] GetRconKeepAliveMessage()
+        {
+            var message = new byte[1];
+            message[0] = (byte)RconClientRequestEnum.CLRC_PONG;
             return message;
         }
 

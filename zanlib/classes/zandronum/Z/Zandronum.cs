@@ -9,7 +9,7 @@ namespace Zanlib
         
         private readonly NetworkHelper networkHelper;
 
-        public Zandronum(string ServerName = "localhost", int Port = 10666)
+        public Zandronum(string ServerName = "127.0.0.1", int Port = 10666)
         {
             networkHelper = new NetworkHelper(ServerName, Port);
 

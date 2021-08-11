@@ -13,7 +13,7 @@ namespace Zanlib
         public void DisplayData(string rconPassword)
         {
             string salt = _networkHelper.GetSaltFromServer();
-            _networkHelper.connectToServer(salt, rconPassword);
+            _networkHelper.ConnectToRconServer(salt, rconPassword);
 
         }
     }

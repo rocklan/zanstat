@@ -31,8 +31,7 @@
         {
             var result = _networkHelper.GetLauncherMessageFromServer(SQF_TEAMINFO_NUMBER | SQF_TEAMINFO_NAME | SQF_TEAMINFO_COLOR | SQF_TEAMINFO_SCORE);
 
-            byte numTeams;
-            result = MessageHelpers.GetByteFromMessage(result, out numTeams);
+            byte numTeams = MessageHelpers.GetByteFromMessage(ref result );
 
             var teams = new Team[numTeams];
 
@@ -41,7 +40,7 @@
             {
                 var team = new Team();
                 teams[i] = team;
-                result = MessageHelpers.GetStringFromMessage(result, out team.Name);
+                team.Name = MessageHelpers.GetStringFromMessage(ref result);
             }
 
             // Get team colours.

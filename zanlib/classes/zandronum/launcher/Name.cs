@@ -15,8 +15,7 @@
         public string Get()
         {
             var result = _networkHelper.GetLauncherMessageFromServer(SQF_NAME);
-            string serverName;
-            MessageHelpers.GetStringFromMessage(result, out serverName);
+            string serverName = MessageHelpers.GetStringFromMessage(ref result);
             return serverName;
         }
     }

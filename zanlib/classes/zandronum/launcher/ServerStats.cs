@@ -23,15 +23,14 @@ namespace Zanlib
             int message = SQF_NAME | SQF_URL | SQF_MAPNAME | SQF_IWAD;
             var result = _networkHelper.GetLauncherMessageFromServer(message);
 
-            byte[] remainingData = MessageHelpers.GetStringFromMessage(result, out string serverName);
-            remainingData = MessageHelpers.GetStringFromMessage(remainingData, out string serverUrl);
-            remainingData = MessageHelpers.GetStringFromMessage(remainingData, out string mapName);
-            MessageHelpers.GetStringFromMessage(remainingData, out string iwadName);
+            string serverName = MessageHelpers.GetStringFromMessage(ref result);
+            string serverUrl = MessageHelpers.GetStringFromMessage(ref result);
+            string mapName = MessageHelpers.GetStringFromMessage(ref result);
+            string iwadName = MessageHelpers.GetStringFromMessage(ref result);
 
             Console.WriteLine("Server name: " + serverName + ", Url: "  + serverUrl);
             Console.WriteLine("IWad name: " + iwadName);
             Console.WriteLine("Map name: " + mapName);
-            
 
             return mapName;
         }
