@@ -100,9 +100,10 @@ namespace Zanlib
 
         public static byte[] GetRconAuthenticateMessage(byte[] auth)
         {
-            var message = new byte[auth.Length + 1];
+            var message = new byte[auth.Length + 2];
             message[0] = (byte)RconClientRequestEnum.CLRC_PASSWORD;
             Buffer.BlockCopy(auth, 0, message, 1, auth.Length);
+            message[33] = 0;
             return message;
         }
 

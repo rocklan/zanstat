@@ -120,12 +120,10 @@ namespace Zanlib
         {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
             {
-                Encoding iso = Encoding.GetEncoding("ISO-8859-1");
-
-                byte[] inputBytes = iso.GetBytes(salt + rconPassword);
+                byte[] inputBytes = Encoding.ASCII.GetBytes(salt + rconPassword);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-                string hexString = BitConverter.ToString(hashBytes).Replace("-", "");
+                string hexString = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
                 byte[] hexStringBytes = System.Text.Encoding.ASCII.GetBytes(hexString);
 
                 return hexStringBytes;
