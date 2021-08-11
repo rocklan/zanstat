@@ -144,7 +144,22 @@ namespace Zanlib
         private void handleMessage(byte[] result)
         {
             string message = MessageHelpers.GetStringFromMessage(ref result);
-            Console.Write("Server Message: " + message);
+            int colorTag = message.IndexOf("\\c-");
+            if (colorTag != -1)
+            {
+                string firstBit = message.Substring(0, colorTag);
+                string endBit = message.Substring(colorTag + 3, message.Length - colorTag - 3);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(firstBit);
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write(endBit);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(message);
+            }
+            
         }
 
         private void handleUpdate(byte[] result)
