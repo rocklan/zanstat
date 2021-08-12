@@ -47,8 +47,8 @@
                 var player = new Player();
                 players[i] = player;
                 player.Name = MessageHelpers.GetStringFromMessage(ref result);
-                result = MessageHelpers.GetShortFromMessage(result, out player.FragCount);
-                result = MessageHelpers.GetShortFromMessage(result, out player.Ping);
+                player.FragCount = MessageHelpers.GetShortFromMessage(ref result);
+                player.Ping = MessageHelpers.GetShortFromMessage(ref result);
                 player.IsSpectating = MessageHelpers.GetByteFromMessage(ref result);
                 player.IsBot = MessageHelpers.GetByteFromMessage(ref result);
                 if (gameMode.IsTeamGame())

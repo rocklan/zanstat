@@ -13,8 +13,7 @@ namespace Zanlib
         private readonly Huffman _huffman;
 
         private IPEndPoint _endpoint;
-        private System.Timers.Timer keepaliveTimer;
-
+        
 
         public NetworkHelper(string hostname, int port)
         {
@@ -25,13 +24,18 @@ namespace Zanlib
             _huffman = new Huffman();
         }
 
-        private void SendMessage(byte[] message)
+        public void SendMessage(byte[] message)
         {
             var compressedMessage = _huffman.Encode(message);
             _udpClient.Send(compressedMessage, compressedMessage.Length);
         }
 
-        private byte[] ReceiveMessage()
+        public void CloseConnection()
+        {
+            _udpClient.Close();
+        }
+
+        public byte[] ReceiveMessage()
         {
             if (_endpoint == null)
                 _endpoint = new IPEndPoint(IPAddress.Any, 0);
@@ -47,17 +51,17 @@ namespace Zanlib
 
             SendMessage(MessageHelpers.GetLauncherMessage(serverQueryFlag));
             byte[] result = ReceiveMessage();
-            
-            result = MessageHelpers.GetIntFromMessage(result, out int response);
+
+            int response = MessageHelpers.GetIntFromMessage(ref result);
             if (response != 5660023)
             {
                 _udpClient.Close();
                 throw ServerDeniedException.Make(response);
             }
 
-            result = MessageHelpers.GetIntFromMessage(result, out int time);
+            int time = MessageHelpers.GetIntFromMessage(ref result);
             string serverVersion = MessageHelpers.GetStringFromMessage(ref result);
-            result = MessageHelpers.GetIntFromMessage(result, out int flags);
+            int flags = MessageHelpers.GetIntFromMessage(ref result);
 
             _udpClient.Close();
 
@@ -88,14 +92,13 @@ namespace Zanlib
             if (response != (byte)RconServerResponseEnum.SVRC_SALT)
                 throw new RconDeniedException("Unexpected server response, expected SVRC_SALT, received: " + response);
 
-            string salt = MessageHelpers.GetStringFromMessage(ref result);
-            
-            return salt;
+            return MessageHelpers.GetStringFromMessage(ref result);
         }
 
         public void ConnectToRconServer(string salt, string rconPassword)
         {
-            SendMessage(MessageHelpers.GetRconAuthenticateMessage(CreateMD5(salt, rconPassword)));
+            byte[] md5 = CreateMD5(salt, rconPassword);
+            SendMessage(MessageHelpers.GetRconAuthenticateMessage(md5));
 
             byte[] result = ReceiveMessage();
             byte responseCode = MessageHelpers.GetByteFromMessage(ref result);
@@ -107,82 +110,15 @@ namespace Zanlib
             }
 
             if (responseCode != (byte)RconServerResponseEnum.SVRC_LOGGEDIN)
+            {
+                _udpClient.Close();
                 throw new RconDeniedException("Unexpected server response, expected login, got: " + responseCode);
-
-            byte serverProtocolVersion = MessageHelpers.GetByteFromMessage(ref result);
-            string hostname = MessageHelpers.GetStringFromMessage(ref result);
-
-            Console.WriteLine("Connected to RCon! Hostname: " + hostname + ", using protocol: " + serverProtocolVersion);
-
-            keepaliveTimer = new System.Timers.Timer(5000);
-            keepaliveTimer.Elapsed += KeepAliveTimer_Elapsed;
-            keepaliveTimer.AutoReset = true;
-            keepaliveTimer.Enabled = true;
-
-            while (!Console.KeyAvailable)
-            {
-                result = ReceiveMessage();
-
-                responseCode = MessageHelpers.GetByteFromMessage(ref result);
-
-                if (responseCode == (byte)RconServerResponseEnum.SVRC_UPDATE)
-                    handleUpdate(result);
-                else if (responseCode == (byte)RconServerResponseEnum.SVRC_MESSAGE)
-                    handleMessage(result);
-                else
-                    Console.WriteLine("Recieved server response: " + responseCode);
-                
             }
-            _udpClient.Close();
+
+            MessageHelpers.GetByteFromMessage(ref result); // serverProtocolVersion
+            MessageHelpers.GetStringFromMessage(ref result); // hostname
         }
 
-        private void KeepAliveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            SendMessage(MessageHelpers.GetRconKeepAliveMessage());
-        }
-
-        private void handleMessage(byte[] result)
-        {
-            string message = MessageHelpers.GetStringFromMessage(ref result);
-            int colorTag = message.IndexOf("\\c-");
-            if (colorTag != -1)
-            {
-                string firstBit = message.Substring(0, colorTag);
-                string endBit = message.Substring(colorTag + 3, message.Length - colorTag - 3);
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(firstBit);
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write(endBit);
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(message);
-            }
-            
-        }
-
-        private void handleUpdate(byte[] result)
-        {
-            byte response = MessageHelpers.GetByteFromMessage(ref result);
-
-            if (response == (byte)RconServerUpdateEnum.SVRCU_ADMINCOUNT)
-            {
-                byte rconAdmins = MessageHelpers.GetByteFromMessage(ref result);
-                Console.WriteLine("New number of rcon admins: " + rconAdmins);
-            }
-            else
-            if (response == (byte)RconServerUpdateEnum.SVRCU_PLAYERDATA)
-            {
-                byte playerCount = MessageHelpers.GetByteFromMessage(ref result);
-                Console.WriteLine("Number of players is now: " + playerCount);
-                for (int i=0;i< playerCount;i++)
-                {
-                    string name = MessageHelpers.GetStringFromMessage(ref result);
-                    Console.WriteLine("    " + name);
-                }
-            }
-        }
 
         public static byte[] CreateMD5(string salt, string rconPassword)
         {

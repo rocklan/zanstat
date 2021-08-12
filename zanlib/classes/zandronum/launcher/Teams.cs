@@ -45,11 +45,11 @@
 
             // Get team colours.
             for (var i = 0; i < numTeams; i++)
-                result = MessageHelpers.GetIntFromMessage(result, out teams[i].Colour);
+                teams[i].Colour = MessageHelpers.GetIntFromMessage(ref result);
 
             // Get team scores.
             for (var i = 0; i < numTeams; i++)
-                result = MessageHelpers.GetShortFromMessage(result, out teams[i].Score);
+                teams[i].Score = MessageHelpers.GetShortFromMessage(ref result);
 
             return teams;
         }

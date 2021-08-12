@@ -31,13 +31,13 @@
         {
             var result = _networkHelper.GetLauncherMessageFromServer(SQF_LIMITS);
             var data = new Limit();
-            result = MessageHelpers.GetShortFromMessage(result, out data.FragLimit);
-            result = MessageHelpers.GetShortFromMessage(result, out data.TimeLimit);
+            data.FragLimit = MessageHelpers.GetShortFromMessage(ref result);
+            data.TimeLimit = MessageHelpers.GetShortFromMessage(ref result);
             if (data.TimeLimit > 0)
-                result = MessageHelpers.GetShortFromMessage(result, out data.TimeLeft);
-            result = MessageHelpers.GetShortFromMessage(result, out data.DuelLimit);
-            result = MessageHelpers.GetShortFromMessage(result, out data.PointLimit);
-            MessageHelpers.GetShortFromMessage(result, out data.WinLimit);
+                data.TimeLeft = MessageHelpers.GetShortFromMessage(ref result);
+            data.DuelLimit = MessageHelpers.GetShortFromMessage(ref result);
+            data.PointLimit = MessageHelpers.GetShortFromMessage(ref result);
+            data.WinLimit = MessageHelpers.GetShortFromMessage(ref result);
             return data;
         }
     }

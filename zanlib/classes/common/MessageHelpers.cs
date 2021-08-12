@@ -37,11 +37,11 @@ namespace Zanlib
         /// <param name="input"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static byte[] GetIntFromMessage(byte[] input, out int val)
+        public static int GetIntFromMessage(ref byte[] input)
         {
-            val = BitConverter.ToInt32(input[0..4]);
-            var remaining = input[4..];
-            return remaining;
+            int val = BitConverter.ToInt32(input[0..4]);
+            input = input[4..];
+            return val;
         }
 
         /// <summary>
@@ -50,11 +50,11 @@ namespace Zanlib
         /// <param name="input"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public static byte[] GetShortFromMessage(byte[] input, out short val)
+        public static short GetShortFromMessage(ref byte[] input)
         {
-            val = BitConverter.ToInt16(input[0..2]);
-            var remaining = input[2..];
-            return remaining;
+            short val = BitConverter.ToInt16(input[0..2]);
+            input = input[2..];
+            return val;
         }
 
         /// <summary>
