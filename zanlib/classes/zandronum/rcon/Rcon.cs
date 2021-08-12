@@ -36,10 +36,13 @@ namespace Rocklan.Zanstat
 
             _networkHelper.ConnectToRconServer(salt, rconPassword);
 
-            _keepaliveTimer = new System.Timers.Timer(keepAlivePeriod * 1000);
-            _keepaliveTimer.Elapsed += KeepAliveTimer_Elapsed;
-            _keepaliveTimer.AutoReset = true;
-            _keepaliveTimer.Enabled = true;
+            if (keepAlivePeriod > 0)
+            {
+                _keepaliveTimer = new System.Timers.Timer(keepAlivePeriod * 1000);
+                _keepaliveTimer.Elapsed += KeepAliveTimer_Elapsed;
+                _keepaliveTimer.AutoReset = true;
+                _keepaliveTimer.Enabled = true;
+            }
 
             _messageReceiver = new BackgroundWorker();
             _messageReceiver.DoWork += BackgroundWorker;
@@ -48,8 +51,8 @@ namespace Rocklan.Zanstat
 
         public void DisconnectFromRcon()
         {
-            // stop with the keepalives
-            _keepaliveTimer.Enabled = false;
+            if (_keepaliveTimer != null)
+                _keepaliveTimer.Enabled = false;
 
             // stop receiving messages
             _messageReceiver.CancelAsync();
