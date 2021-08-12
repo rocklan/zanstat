@@ -1,6 +1,8 @@
 # Zandronum Server Querying
 
-This repository provides a .NET nuget package and a command line console application for querying [Zandronum](https://zandronum.com) using the [Launcher Protocol](https://wiki.zandronum.com/Launcher_protocol) and also using the [RCon protocol](https://wiki.zandronum.com/RCon_protocol). 
+his repository provides a .NET nuget package and a command line console application for querying [Zandronum](https://zandronum.com) using the [Launcher Protocol](https://wiki.zandronum.com/Launcher_protocol) and also using the [RCon protocol](https://wiki.zandronum.com/RCon_protocol). 
+
+![Example Console Usage](https://github.com/rocklan/zanstat/blob/master/screenshot.png?raw=true)
 
 ## Console Application
 
