@@ -79,10 +79,16 @@ class MyCode
 
 If you'd like to send message to the server you can do so using the `SendCommand()` function:
 
-```
-   // return the list of maps
-   _zandronum.Rcon.SendCommand("ListMaps");
+```csharp
+// return the list of maps
+_zandronum.Rcon.SendCommand("ListMaps");
    
-   // change to map03:
-   _zandronum.Rcon.SendCommand("MAP MAP03");
+// change to map03:
+_zandronum.Rcon.SendCommand("MAP MAP03");
 ```
+
+## Dev Notes
+
+Many, many thanks go to legend [Sam Izzo](https://github.com/samizzo/) for doing 99% of the work - writing the Huffman encoder, the UDP launcher code, and helping me get the RCon stuff working. 
+
+Beware, this library is using UDP, not TCP! UDP is a strange, weird world, brace yourself.
