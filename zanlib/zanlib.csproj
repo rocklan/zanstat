@@ -4,6 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Zanlib</AssemblyName>
     <RootNamespace>Zanlib</RootNamespace>
+    <PackageId>Rocklan.Zanlib</PackageId>
+    <Authors>Sam Izzo, Lachlan Barclay</Authors>
+    <Description>Library for querying Zandronum using the launcher protocol and the RCon protocol</Description>
+    <PackageProjectUrl>https://github.com/rocklan/zanstat</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/rocklan/zanstat.git</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>

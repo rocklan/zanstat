@@ -114,6 +114,13 @@ namespace Zanlib
             return message;
         }
 
+        public static byte[] GetRconDisconnectMessage()
+        {
+            var message = new byte[1];
+            message[0] = (byte)RconClientRequestEnum.CLRC_DISCONNECT;
+            return message;
+        }
+
         internal static byte[] GetCommandMessage(string line)
         {
             byte[] asciiBytes = ASCIIEncoding.ASCII.GetBytes(line);

@@ -8,12 +8,13 @@ namespace Zanstat
         static string hostname = "localhost";
         static int port = 10666;
         static string rconpassword = "";
+        
+        
+
         static int Main(string[] args)
         {
             try
             {
-               
-
                 return new Program().QueryZandronumServer(args);
             }
             catch (Exception e)
@@ -22,6 +23,9 @@ namespace Zanstat
                 return 1;
             }
         }
+
+        private Zandronum _zandronum;
+
 
         public int QueryZandronumServer(string[] args)
         {
@@ -45,71 +49,128 @@ namespace Zanstat
 
             Console.WriteLine($"Connecting to {hostname}:{port} ... ");
 
-            Zandronum Zanlib = new Zandronum(hostname, port);
+            _zandronum = new Zandronum(hostname, port);
 
             for (var i = 0; i < args.Length; i++)
             {
                 if (args[i] == "-getname")
                 {
-                    var serverName = Zanlib.Name.Get();
+                    var serverName = _zandronum.Name.Get();
                     Console.WriteLine($"Server name: {serverName}");
                 }
                 else if (args[i] == "-getmapname")
                 {
-                    var mapName = Zanlib.MapName.Get();
+                    var mapName = _zandronum.MapName.Get();
                     Console.WriteLine($"Current map: {mapName}");
                 }
                 else if (args[i] == "-getmaxplayers")
                 {
-                    var maxPlayers = Zanlib.MaxPlayers.Get();
+                    var maxPlayers = _zandronum.MaxPlayers.Get();
                     Console.WriteLine($"Max players: {maxPlayers}");
                 }
                 else if (args[i] == "-getpwads")
                 {
-                    var pwads = Zanlib.PWads.Get();
+                    var pwads = _zandronum.PWads.Get();
                     Console.WriteLine("PWADS:");
                     foreach (var pwad in pwads)
                         Console.WriteLine($"  {pwad}");
                 }
                 else if (args[i] == "-getiwad")
                 {
-                    var iwad = Zanlib.Iwad.Get();
+                    var iwad = _zandronum.Iwad.Get();
                     Console.WriteLine($"IWAD: {iwad}");
                 }
                 else if (args[i] == "-getskill")
                 {
-                    var skill = Zanlib.Skill.Get();
+                    var skill = _zandronum.Skill.Get();
                     Console.WriteLine($"Skill: {skill}");
                 }
                 else if (args[i] == "-getlimits")
                 {
-                    var limits = Zanlib.Limits.Get();
+                    var limits = _zandronum.Limits.Get();
                     Console.WriteLine($"Limits: {limits}");
                 }
                 else if (args[i] == "-getplayers")
                 {
-                    var players = Zanlib.Players.Get();
+                    var players = _zandronum.Players.Get();
                     Console.WriteLine("Players:");
                     foreach (var player in players)
                         Console.WriteLine($"  {player}");
                 }
                 else if (args[i] == "-getteams")
                 {
-                    var teams = Zanlib.Teams.Get();
+                    var teams = _zandronum.Teams.Get();
                     Console.WriteLine("Teams:");
                     foreach (var team in teams)
                         Console.WriteLine($"  {team}");
                 }
-                else if (args[i] == "-getdata")
+                else if (args[i] == "-rcon")
                 {
-                    Zanlib.Rcon.DisplayData(rconpassword);
-                    //Zanlib.ServerStats.Display();
+                    StartRcon();
                 }
             }
 
             return 0;
         }
 
+        private void StartRcon()
+        {
+            _zandronum.Rcon.ConnectToRcon(rconpassword);
+
+            _zandronum.Rcon.ServerMessage += Rcon_ServerMessage;
+            _zandronum.Rcon.MapChange += Rcon_MapChange;
+            _zandronum.Rcon.PlayerChange += Rcon_PlayerChange;
+
+            Console.WriteLine("Please enter commands to pass to server:");
+            string line = Console.ReadLine();
+
+            while (line != "quit")
+            {
+                _zandronum.Rcon.SendCommand(line);
+                line = Console.ReadLine();
+            }
+
+            _zandronum.Rcon.DisconnectFromRcon();
+        }
+
+        private void Rcon_PlayerChange(object sender, EventArgs e)
+        {
+            var ea = e as ZandronumPlayerChangeEventArgs;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Players have changed: ");
+            foreach (var player in ea.Players)
+            {
+                Console.WriteLine("  " + player);
+            }
+        }
+
+        private void Rcon_MapChange(object sender, EventArgs e)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write((e as ZandronumMapChangeEventArgs).MapName);
+        }
+
+        private void Rcon_ServerMessage(object sender, EventArgs e)
+        {
+            string message = (e as ZandronumMessageEventArgs).Message;
+
+            int colorTag = message.IndexOf("\\c-");
+            if (colorTag != -1)
+            {
+                string firstBit = message.Substring(0, colorTag);
+                string endBit = message.Substring(colorTag + 3, message.Length - colorTag - 3);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(firstBit);
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(endBit);
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.Write(message);
+            }
+            
+        }
 
         private static int RunTests()
         {
