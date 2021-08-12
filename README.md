@@ -1,4 +1,4 @@
-# Zanstat - dotnet code for querying Zandronum servers
+# Zanstat - .NET code for querying Zandronum servers
 
 This repository provides a [Nuget package](https://www.nuget.org/packages/Rocklan.Zanstat) and a command line console application for querying [Zandronum](https://zandronum.com) using the [Launcher Protocol](https://wiki.zandronum.com/Launcher_protocol) and also using the [RCon protocol](https://wiki.zandronum.com/RCon_protocol). 
 
@@ -35,7 +35,7 @@ Notes:
 To use, instantiate the `Zandronum` class and pass through the server URL and port:
 
 ```csharp
-Zanlib.Zandronum zandronum = new Zanlib.Zandronum("example.com", 10666);
+var zandronum = new Rocklan.Zanstat.Zandronum("example.com", 10666);
 ```
 
 Once instantiated you can then query the server for information like Server Name, Current Map, current Players, etc:
@@ -60,6 +60,8 @@ class MyCode
 {
    function ConnectToZandronumServer()
    {
+       var zandronum = new Rocklan.Zanstat.Zandronum("example.com", 10666);
+       
        zandronum.Rcon.ServerMessage += Rcon_ServerMessage;
        zandronum.Rcon.ConnectToRcon("ThisIsMyRconPassword");
 
