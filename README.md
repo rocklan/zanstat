@@ -3,12 +3,13 @@ Zandronum server query library and command-line test program
 
 Usage:
 
-zanstat <-server hostname:port> [command]
+`zanstat <-server hostname:port> <-rcon RConServerPassword> [command]`
 
-where [command] is one of:
+where `[command]` is one of:
 
-   -getname       Print server name  
-   -getmapname    Print current map name  
+```
+   -getname       Print server name
+   -getmapname    Print current map name
    -getmaxplayers Print max players  
    -getpwads      Print pwads in use  
    -getiwad       Print iwad in use  
@@ -16,11 +17,11 @@ where [command] is one of:
    -getlimits     Print various server limits  
    -getplayers    Print players currently on the server  
    -getteams      Print teams  
+```
 
 `-server hostname:port` is required!
 
 Notes:
-   * -getteams doesn't currently work! My server returns no data for this command.
-   * You may only query the server every `sv_queryignoretime` seconds. If you query too
-     frequently, the server will return an error code and the library will throw an
-     exception.
+   * If `-rcon` is supplied then no command is needed. It will go into interactive mode where you can pass through any command you wish.
+   * `-getteams` doesn't currently work! My server returns no data for this command.
+   * For commands, you may only query the server every `sv_queryignoretime` seconds. If you query too frequently, the server will return an error code and the library will throw an exception.
