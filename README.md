@@ -1,6 +1,6 @@
-# Zandronum Server Querying
+# ZanStat - dotnet code for querying Zandronum servers
 
-his repository provides a .NET nuget package and a command line console application for querying [Zandronum](https://zandronum.com) using the [Launcher Protocol](https://wiki.zandronum.com/Launcher_protocol) and also using the [RCon protocol](https://wiki.zandronum.com/RCon_protocol). 
+This repository provides a [Nuget package](https://www.nuget.org/packages/Rocklan.Zanstat) and a command line console application for querying [Zandronum](https://zandronum.com) using the [Launcher Protocol](https://wiki.zandronum.com/Launcher_protocol) and also using the [RCon protocol](https://wiki.zandronum.com/RCon_protocol). 
 
 ![Example Console Usage](https://github.com/rocklan/zanstat/blob/master/screenshot.png?raw=true)
 
