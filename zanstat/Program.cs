@@ -115,12 +115,13 @@ namespace Zanstat
 
         private void StartRcon()
         {
-            _zandronum.Rcon.ConnectToRcon(rconpassword);
-
             _zandronum.Rcon.ServerMessage += Rcon_ServerMessage;
             _zandronum.Rcon.MapChange += Rcon_MapChange;
             _zandronum.Rcon.PlayerChange += Rcon_PlayerChange;
 
+            _zandronum.Rcon.ConnectToRcon(rconpassword);
+
+            
             Console.WriteLine("Please enter commands to pass to server:");
             string line = Console.ReadLine();
 
