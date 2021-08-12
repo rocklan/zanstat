@@ -114,6 +114,15 @@ namespace Zanlib
             return message;
         }
 
+        internal static byte[] GetCommandMessage(string line)
+        {
+            byte[] asciiBytes = ASCIIEncoding.ASCII.GetBytes(line);
+
+            var message = new byte[asciiBytes.Length + 1];
+            message[0] = (byte)RconClientRequestEnum.CLRC_COMMAND;
+            Buffer.BlockCopy(asciiBytes, 0, message, 1, asciiBytes.Length);
+            return message;
+        }
     }
 
 

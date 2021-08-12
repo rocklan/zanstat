@@ -30,12 +30,13 @@ namespace Zanlib
             bw.DoWork += BackgroundWorker;
             bw.RunWorkerAsync();
 
-            string line = Console.ReadLine();
+            string line = null;
             while (line != "quit")
             {
                 Console.WriteLine("Please enter your command to send:");
                 line = Console.ReadLine();
-                
+
+                _networkHelper.SendCommand(line);
             }
         }
 

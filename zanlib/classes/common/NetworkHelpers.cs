@@ -24,26 +24,6 @@ namespace Zanlib
             _huffman = new Huffman();
         }
 
-        public void SendMessage(byte[] message)
-        {
-            var compressedMessage = _huffman.Encode(message);
-            _udpClient.Send(compressedMessage, compressedMessage.Length);
-        }
-
-        public void CloseConnection()
-        {
-            _udpClient.Close();
-        }
-
-        public byte[] ReceiveMessage()
-        {
-            if (_endpoint == null)
-                _endpoint = new IPEndPoint(IPAddress.Any, 0);
-
-            var compressedResult = _udpClient.Receive(ref _endpoint);
-            var result = _huffman.Decode(compressedResult);
-            return result;
-        }
 
         public byte[] GetLauncherMessageFromServer(int serverQueryFlag)
         {
@@ -66,9 +46,35 @@ namespace Zanlib
             _udpClient.Close();
 
             return result;
-           
+
         }
 
+
+
+
+        public void SendMessage(byte[] message)
+        {
+            var compressedMessage = _huffman.Encode(message);
+            _udpClient.Send(compressedMessage, compressedMessage.Length);
+        }
+
+        public void CloseConnection()
+        {
+            _udpClient.Close();
+        }
+
+
+        public byte[] ReceiveMessage()
+        {
+            if (_endpoint == null)
+                _endpoint = new IPEndPoint(IPAddress.Any, 0);
+
+            var compressedResult = _udpClient.Receive(ref _endpoint);
+            var result = _huffman.Decode(compressedResult);
+            return result;
+        }
+
+     
 
         public string GetSaltFromServer()
         {
@@ -119,8 +125,13 @@ namespace Zanlib
             MessageHelpers.GetStringFromMessage(ref result); // hostname
         }
 
+        internal void SendCommand(string line)
+        {
+            SendMessage(MessageHelpers.GetCommandMessage(line));
+        }
 
-        public static byte[] CreateMD5(string salt, string rconPassword)
+
+        private static byte[] CreateMD5(string salt, string rconPassword)
         {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
             {
