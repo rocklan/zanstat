@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Zanlib
+namespace Rocklan.Zanstat
 {
 
     public class Iwad: ZandronumQuery

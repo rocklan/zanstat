@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zanlib
+namespace Rocklan.Zanstat
 {
     public class ZandronumRconAdminsChangeEventArgs : EventArgs
     {

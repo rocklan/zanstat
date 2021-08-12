@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Rocklan.Zanstat.Console</AssemblyName>
+    <RootNamespace>Rocklan.Zanstat.Console</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\zanlib\Rocklan.Zanstat.csproj" />
+  </ItemGroup>
+
+</Project>

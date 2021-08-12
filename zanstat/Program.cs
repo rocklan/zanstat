@@ -1,15 +1,13 @@
 ﻿using System;
-using Zanlib;
+using Rocklan.Zanstat;
 
-namespace Zanstat
+namespace Rocklan.Zanstat.Commandline
 {
     class Program
     {
         static string hostname = "localhost";
         static int port = 10666;
         static string rconpassword = "";
-        
-        
 
         static int Main(string[] args)
         {

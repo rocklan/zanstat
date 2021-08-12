@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Zanlib
+namespace Rocklan.Zanstat
 {
     public class ZandronumPlayerChangeEventArgs : EventArgs
     {

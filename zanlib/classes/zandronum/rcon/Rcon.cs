@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Threading.Tasks;
 
-namespace Zanlib
+namespace Rocklan.Zanstat
 {
     public class Rcon : ZandronumQuery
     {

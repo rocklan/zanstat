@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Zanstat
+namespace Rocklan.Zanstat.Commandline
 {
     public static class Tests
     {
@@ -17,6 +17,7 @@ namespace Zanstat
                     var index = startIndex + i;
                     if (index < input.Length)
                     {
+                        
                         Console.Write(input[index].ToString("X2"));
                         Console.Write(" ");
                         count++;
@@ -61,7 +62,7 @@ namespace Zanstat
         {
             var bytes = Encoding.ASCII.GetBytes(message);
 
-            Zanlib.Huffman huffman = new Zanlib.Huffman();
+            Huffman huffman = new Huffman();
 
             var compressed = huffman.Encode(bytes);
             Console.WriteLine($"Compressed data (length is {compressed.Length}):");

@@ -1,4 +1,4 @@
-﻿namespace Zanlib
+﻿namespace Rocklan.Zanstat
 {
     public class MaxPlayers: ZandronumQuery
     {

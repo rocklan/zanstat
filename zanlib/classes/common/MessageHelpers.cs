@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace Zanlib
+namespace Rocklan.Zanstat
 {
     internal static class MessageHelpers
     {

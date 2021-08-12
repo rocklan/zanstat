@@ -1,10 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>Zanlib</AssemblyName>
-    <RootNamespace>Zanlib</RootNamespace>
-    <PackageId>Rocklan.Zanlib</PackageId>
+    <AssemblyName>Rocklan.Zanstat</AssemblyName>
+    <RootNamespace>Rocklan.Zanstat</RootNamespace>
+    <PackageId>Rocklan.Zanstat</PackageId>
     <Authors>Sam Izzo, Lachlan Barclay</Authors>
     <Description>Library for querying Zandronum using the launcher protocol and the RCon protocol</Description>
     <PackageProjectUrl>https://github.com/rocklan/zanstat</PackageProjectUrl>
