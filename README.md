@@ -4,6 +4,10 @@ This repository provides a [Nuget package](https://www.nuget.org/packages/Rockla
 
 ![Example Console Usage](https://github.com/rocklan/zanstat/blob/master/screenshot.png?raw=true)
 
+Using this library it is very possible to build a discord bot (currently a work in progress):
+
+![Example Discord Bot](https://github.com/rocklan/zanstat/blob/master/discord.png?raw=true)
+
 ## Console Application
 
 Usage:
@@ -91,8 +95,9 @@ _zandronum.Rcon.SendCommand("ListMaps");
 _zandronum.Rcon.SendCommand("MAP MAP03");
 ```
 
+
 ## Dev Notes
 
-Many, many thanks go to legend [Sam Izzo](https://github.com/samizzo/) for doing 99% of the work - writing the Huffman encoder, the UDP launcher code, and helping me get the RCon stuff working. 
+Many, many thanks go to legend [Sam Izzo](https://github.com/samizzo/) for doing 99% of the work - porting (and improving) the Java Huffman encoder, the UDP launcher code, and helping me get the RCon stuff working. 
 
 Beware, this library is using UDP, not TCP! UDP is a strange, weird world, brace yourself.
