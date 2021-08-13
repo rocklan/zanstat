@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net.Sockets;
 using System.Threading.Tasks;
 
 namespace Rocklan.Zanstat
 {
-    public class Rcon : ZandronumQuery
+    public class Rcon
     {
         /// <summary>
         /// This timer keeps us alive with the server
@@ -23,18 +24,30 @@ namespace Rocklan.Zanstat
         public event EventHandler PlayerChange;
         public event EventHandler RconAdminsChange;
 
-        public Rcon(NetworkHelper networkHelper) : base(networkHelper) { }
+        private NetworkHelperStateful _networkHelper;
+        private readonly string _hostname;
+        private readonly int _port;
+
+        public Rcon(string hostname, int port)
+        {
+            _networkHelper = new NetworkHelperStateful();
+            this._hostname = hostname;
+            this._port = port;
+        }
 
 
         /// <summary>
         /// Connects to RCon
         /// </summary>
-        /// <returns></returns>
-        public void ConnectToRcon(string rconPassword, int keepAlivePeriod = 5)
+        /// <param name="rconPassword">Password to connect with</param>
+        /// <param name="keepAlivePeriod">Seconds to pause between keepalives. 0 if you don't want any keepalives.</param>
+        public int ConnectToRcon(string rconPassword, int keepAlivePeriod = 5)
         {
+            _networkHelper.OpenConnection(_hostname, _port);
+
             string salt = _networkHelper.GetSaltFromServer();
 
-            _networkHelper.ConnectToRconServer(salt, rconPassword);
+            int receivePort = _networkHelper.AuthenticateToRconServer(salt, rconPassword);
 
             if (keepAlivePeriod > 0)
             {
@@ -45,8 +58,11 @@ namespace Rocklan.Zanstat
             }
 
             _messageReceiver = new BackgroundWorker();
+            _messageReceiver.WorkerSupportsCancellation = true;
             _messageReceiver.DoWork += BackgroundWorker;
             _messageReceiver.RunWorkerAsync();
+
+            return receivePort;
         }
 
         public void DisconnectFromRcon()
@@ -54,14 +70,14 @@ namespace Rocklan.Zanstat
             if (_keepaliveTimer != null)
                 _keepaliveTimer.Enabled = false;
 
-            // stop receiving messages
-            _messageReceiver.CancelAsync();
-
-            // tell zan we are going to disconnect
+            // tell zan we want to disconnect
             _networkHelper.SendMessage(MessageHelpers.GetRconDisconnectMessage());
 
-            // shut off the UDP connection
+            // shut off the UDP connection 
             _networkHelper.CloseConnection();
+
+            // stop receiving messages
+            _messageReceiver.CancelAsync();
         }
 
         public void SendCommand(string command)
@@ -74,16 +90,22 @@ namespace Rocklan.Zanstat
             while (!_messageReceiver.CancellationPending)
             {
                 // This blocks until we get a message from the server
-                byte[] result = _networkHelper.ReceiveMessage();
+                try
+                {
+                    byte[] result = _networkHelper.ReceiveMessage();
 
-                byte responseCode = MessageHelpers.GetByteFromMessage(ref result);
+                    byte responseCode = MessageHelpers.GetByteFromMessage(ref result);
 
-                if (responseCode == (byte)RconServerResponseEnum.SVRC_UPDATE)
-                    handleUpdate(result);
-                else if (responseCode == (byte)RconServerResponseEnum.SVRC_MESSAGE)
-                    handleMessage(result);
-                else
-                    Console.WriteLine("** Unknown server message code: " + responseCode);
+                    if (responseCode == (byte)RconServerResponseEnum.SVRC_UPDATE)
+                        handleUpdate(result);
+
+                    if (responseCode == (byte)RconServerResponseEnum.SVRC_MESSAGE)
+                        handleMessage(result);
+                }
+                catch (SocketException)
+                {
+                    break;
+                }
             }
 
             e.Cancel = true;

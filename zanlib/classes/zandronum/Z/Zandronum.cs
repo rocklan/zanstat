@@ -23,7 +23,7 @@ namespace Rocklan.Zanstat
             Skill = new Skill(networkHelper);
             Teams = new Teams(networkHelper);
             ServerStats = new ServerStats(networkHelper);
-            Rcon = new Rcon(networkHelper);
+            Rcon = new Rcon(ServerName, Port);
         }
 
 

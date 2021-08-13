@@ -130,13 +130,16 @@ namespace Rocklan.Zanstat.Commandline
             }
 
             _zandronum.Rcon.DisconnectFromRcon();
+
+            Console.WriteLine("We should have disconnected. Press enter to quit...");
+            Console.ReadLine();
         }
 
         private void Rcon_PlayerChange(object sender, EventArgs e)
         {
             var ea = e as ZandronumPlayerChangeEventArgs;
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Players have changed: ");
+            Console.WriteLine(DateTime.Now + ": " + "Players have changed: ");
             foreach (var player in ea.Players)
             {
                 Console.WriteLine("  " + player);
@@ -146,7 +149,7 @@ namespace Rocklan.Zanstat.Commandline
         private void Rcon_MapChange(object sender, EventArgs e)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write((e as ZandronumMapChangeEventArgs).MapName);
+            Console.Write(DateTime.Now + ": " + (e as ZandronumMapChangeEventArgs).MapName);
         }
 
         private void Rcon_ServerMessage(object sender, EventArgs e)
@@ -159,14 +162,14 @@ namespace Rocklan.Zanstat.Commandline
                 string firstBit = message.Substring(0, colorTag);
                 string endBit = message.Substring(colorTag + 3, message.Length - colorTag - 3);
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(firstBit);
+                Console.Write(DateTime.Now + ": " + firstBit);
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.Write(endBit);
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.Write(message);
+                Console.Write(DateTime.Now + ": " + message);
             }
             
         }
